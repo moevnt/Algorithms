@@ -22,7 +22,7 @@ public class DoubleEndedPQ {
 
 	public void insert(int n){
 		back = increment(back);
-		System.out.println(back);
+
 
 		if(size == 0) {
 			queue[front] = n;
@@ -30,7 +30,8 @@ public class DoubleEndedPQ {
 
 		else {
 			int temp;
-			for (int i = front; i < size-1; i++) {
+
+			for (int i = front; i < size-1; i++) {System.out.println("n");
 				if (queue[i] > n) {
 					temp = queue[i];
 					queue[i] = n;
