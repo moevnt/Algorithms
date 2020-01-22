@@ -35,7 +35,7 @@ public class Recursion {
 
 		else {
 			x[count] = high;
-			return findPath(n,);
+			return x;
 		}
 	}
 
