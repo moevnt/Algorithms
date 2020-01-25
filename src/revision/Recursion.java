@@ -27,17 +27,15 @@ public class Recursion {
 	}
 
 	public static int[] findPath(int[][] n, int r, int c){
-		int[] surroundings = checkSurrounding(n,r,c);
-		int high = findHigh(surroundings);
+		int[] surr = checkSurrounding(n,r,c);
 
-		if (high > n[r][c])
-			return x;
-
-		else {
-			x[count] = high;
-			//return findPath(n,);
+		for(int i=0;i<surr.length;i++) {
+			if (n[r][c] < surr[i] && n[r][c] != 0) {
+				findPath(n,r,c);
+			}
 		}
-		return x;
+
+		return surr;
 	}
 
 	private static int findHigh(int[] n){
@@ -75,16 +73,6 @@ public class Recursion {
 			test[2] = n[r][c-1];
 		if(c < n[r].length)
 			test[3] = n[r][c+1];
-		/*
-		System.out.println(up);
-		System.out.println(down);
-		System.out.println(left);
-		System.out.println(right);
-		System.out.println(uL);
-		System.out.println(uR);
-		System.out.println(dL);
-		System.out.println(dR);
-		*/
 
 		return test;
 	}
@@ -99,5 +87,3 @@ public class Recursion {
 	}
 
 }
-
-//used GeeksForGeeks to initialize multidimensional arrays

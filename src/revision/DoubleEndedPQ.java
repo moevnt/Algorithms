@@ -20,27 +20,54 @@ public class DoubleEndedPQ {
 		size = 0;
 	}
 
+	public int findMin(){
+		return queue[front];
+	}
+
+	public int findMax(){
+		return queue[back-1];
+	}
+
+	public void deleteMax(){
+		queue[back-1] = 0;
+		back--;
+		size--;
+	}
+
+	public void deleteMin(){
+		queue[front] = 0;
+		front++;
+		size--;
+	}
+
 	public void insert(int n){
+
 		back = increment(back);
 
-
-		if(size == 0) {
+		if(size == 0)
 			queue[front] = n;
+
+		else if(queue[back-size] < n){
+			queue[back-1] = n;
+
 		}
 
-		else {
+		else{
 			int temp;
-
-			for (int i = front; i < size-1; i++) {System.out.println("n");
-				if (queue[i] > n) {
+			for(int i=front;i<size;i++){
+				if(queue[i] > n){
 					temp = queue[i];
 					queue[i] = n;
 					n = temp;
+
+					if (queue[i] < n)
+						queue[back-1] = n;
 				}
+
 			}
 		}
-		size++;
-		System.out.println(size);
+
+		size = increment(size);
 	}
 
 	public int increment(int x){
@@ -50,17 +77,27 @@ public class DoubleEndedPQ {
 	}
 
 	public void display(){
-		for (int i=0;i<queue.length;i++){
-			System.out.print(queue[i]+",");
+		for (int i=0;i<size;i++){
+			System.out.print(queue[front+i]+",");
 		}
+		System.out.println();
 	}
 
 	public static void main(String[] args){
 		DoubleEndedPQ pq = new DoubleEndedPQ();
 
-		pq.insert(10);
-		pq.insert(9);
+		for (int i=1;i<QUEUE_SIZE;i++) {
+			pq.insert(i);
+		}
+
 		pq.display();
+		pq.findMin();
+		pq.findMax();
+		pq.deleteMin();
+		pq.deleteMax();
+		pq.display();
+
+
 	}
 
 
