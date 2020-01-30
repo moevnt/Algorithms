@@ -1,89 +1,121 @@
 package revision;
 
-public class Recursion {
-	private static int[] x;
-	private static int count =0;
+public class recursion {
 
-	public static void main(String[] args){
-		int[][] n = new int[3][3];
+		private static Unit[] x = new Unit[9];
+		private static int count =0;
 
-		n[0][0] = 97;
-		n[0][1] = 47;
-		n[0][2] = 56;
-		n[1][0] = 35;
-		n[1][1] = 57;
-		n[1][2] = 41;
-		n[2][0] = 89;
-		n[2][1] = 36;
-		n[2][2] = 98;
+		public static void main(String[] args){
+			Unit[][] n = new Unit[3][3];
 
-		display(n);
+			n[0][0] = new Unit(97,0,0);
+			n[0][1] = new Unit(47,0,1);
+			n[0][2] = new Unit(56,0,2);
+			n[1][0] = new Unit(35,1,0);
+			n[1][1] = new Unit(57,1,1);
+			n[1][2] = new Unit(41,1,2);
+			n[2][0] = new Unit(89,2,0);
+			n[2][1] = new Unit(36,2,1);
+			n[2][2] = new Unit(98,2,2);
 
-		int[] results = findPath(n, 0,0 );
+			display(n);
 
-		for (int i=0;i<results.length;i++){
-			System.out.println(results[i]);
-		}
-	}
 
-	public static int[] findPath(int[][] n, int r, int c){
-		int[] surr = checkSurrounding(n,r,c);
+			Unit[] results = findPath(n, 0,0);
 
-		for(int i=0;i<surr.length;i++) {
-			if (n[r][c] < surr[i] && n[r][c] != 0) {
-				findPath(n,r,c);
+			for (int i=0;i<results.length;i++){
+				if(results[i] != null)
+					System.out.println(results[i].getNumber());
 			}
 		}
 
-		return surr;
-	}
+		public static Unit[] findPath(Unit[][] n, int r, int c){
+			Unit[] surr = checkSurrounding(n,r,c);
+			Unit[] output = new Unit[n.length];
+			int count=0;
 
-	private static int findHigh(int[] n){
-		int high = Integer.MIN_VALUE;
-		for (int i=0;i<n.length;i++){
-			if (n[i]<high)
-				high = n[i];
-		}
-		return high;
-	}
-
-	public static int[] checkSurrounding(int[][] n, int r, int c){
-		//up, down, left, right, uL, uR, dL, dR
-		int test[] = new int[8];
-		if(r < n.length-1){
-			test[1] = n[r+1][c];
-
-			if(c < n[r].length)
-				test[7] = n[r+1][c+1];
-
-			if(c > 0)
-				test[6] = n[r+1][c-1];
-		}
-		if(r > 0){
-			test[0] = n[r-1][c];
-
-			if(c < n[r].length)
-				test[5] = n[r-1][c+1];
-
-			if(c > 0)
-				test[4] = n[r-1][c-1];
-		}
-
-		if(c > 0)
-			test[2] = n[r][c-1];
-		if(c < n[r].length)
-			test[3] = n[r][c+1];
-
-		return test;
-	}
-
-	public static void display(int[][] n){
-		for(int r=0;r<n.length;r++){
-			for(int c=0;c<n[0].length;c++){
-				System.out.print(n[r][c]+"\t");
+			for (int i=0;i<surr.length;i++){
+				if(surr[i] != null && surr[i].getNumber() < n[r][c].getNumber()){
+					output[count++] = surr[i];
+					findPath(n, surr[i].getR(),surr[i].getC(),output, count);
+				}
 			}
-			System.out.println();
+
+			if (r == n.length-1 && c == n[r].length-1)
+				return output;
+			else if(r == n.length)
+				return findPath(n,r+1,c);
+			else
+				return findPath(n,r,c+1);
 		}
+
+	public static Unit[] findPath(Unit[][] n, int r, int c, Unit[] output, int count){
+		Unit[] surr = checkSurrounding(n,r,c);
+
+
+		for (int i=0;i<surr.length;i++){
+			if(surr[i] != null && surr[i].getNumber() < n[r][c].getNumber()){
+				output[count++] = surr[i];
+				findPath(n, surr[i].getR(),surr[i].getC(),output, count);
+			}
+		}
+
+		if (r == n.length-1 && c == n[r].length-1)
+			return output;
+		else if(r == n.length)
+			return findPath(n,r+1,c);
+		else
+			return findPath(n,r,c+1);
+
 	}
+
+		private static int findHigh(int[] n){
+			int high = Integer.MIN_VALUE;
+			for (int i=0;i<n.length;i++){
+				if (n[i]<high)
+					high = n[i];
+			}
+			return high;
+		}
+
+		public static Unit[] checkSurrounding(Unit[][] n, int r, int c){
+			//up, down, left, right, uL, uR, dL, dR
+			Unit test[] = new Unit[8];
+			if(r < n.length-1){
+				test[1] = new Unit(n[r+1][c].getNumber(),r+1,c);
+
+				if(c < n[r].length)
+					test[7] = new Unit(n[r+1][c+1].getNumber(),r+1,c+1);
+
+				if(c > 0)
+					test[6] = new Unit(n[r+1][c-1].getNumber(),r+1,c-1);
+			}
+			if(r > 0){
+				test[0] = new Unit(n[r-1][c].getNumber(),r-1,c);
+
+				if(c < n[r].length)
+					test[5] = new Unit(n[r-1][c+1].getNumber(),r-1,c+1);
+
+				if(c > 0)
+					test[4] = new Unit(n[r-1][c-1].getNumber(),r-1,c-1);
+			}
+
+			if(c > 0)
+				test[2] = new Unit(n[r][c-1].getNumber(),r,c-1);
+			if(c < n[r].length)
+				test[3] = new Unit(n[r][c+1].getNumber(),r,c+1);
+
+			return test;
+		}
+
+		public static void display(Unit[][] n){
+			for(int r=0;r<n.length;r++){
+				for(int c=0;c<n[0].length;c++){
+					System.out.print(n[r][c].getNumber()+"\t");
+				}
+				System.out.println();
+			}
+		}
+
 
 }
