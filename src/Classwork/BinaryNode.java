@@ -9,12 +9,12 @@ pre, post, in
 
 package Classwork;
 
-import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
+
 
 public class BinaryNode<AnyType> {
 
-	private AnyType element; //Data
-	private BinaryNode<AnyType> left, right; //lower nodes
+	public AnyType element; //Data
+	public BinaryNode<AnyType> left, right; //lower nodes
 
 	public BinaryNode(AnyType element){
 		this(element, null, null);
@@ -87,6 +87,13 @@ public class BinaryNode<AnyType> {
 
 	}
 
+	public boolean isLeaf(){
+		if (getLeft() == null && getRight() == null)
+			return true;
+
+		return false;
+	}
+
 	//O(n)
 	public void printPreOrder(){
 
@@ -152,4 +159,5 @@ public class BinaryNode<AnyType> {
 
 		a.printPreOrder();
 	}
+
 }

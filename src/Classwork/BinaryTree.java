@@ -1,6 +1,6 @@
 package Classwork;
 
-import sun.invoke.empty.Empty;
+//import sun.invoke.empty.Empty;
 
 public class BinaryTree <AnyType>{
 	private BinaryNode<AnyType> root;
