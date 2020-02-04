@@ -6,83 +6,115 @@ Contains, Delete, FindMin, Find Max, insert
 
 package Classwork;
 
+import javax.swing.*;
+import java.util.Comparator;
+
 public class BinarySearchTree<AnyType extends Comparable<AnyType>> {
 
-	private BinaryNode<AnyType> root;
 
-	public BinarySearchTree(AnyType root){
-		this.root = new BinaryNode<AnyType>(root, null, null);
-	}
+
+	private static BinaryNode root;
+	private Comparator<? super AnyType> cmp;
 
 	public BinarySearchTree(){
+		this(null);
+	}
+
+	public BinarySearchTree(Comparator<? super AnyType> c) {
 		root = null;
+		cmp = c;
 	}
 
-	public AnyType findMin(BinaryNode x){
-		if(x.getLeft() != null)
-			return findMin(x.getLeft());
-
+	public int myCompare(AnyType lhs, AnyType rhs){
+		if(cmp != null)
+			return cmp.compare(lhs,rhs);
 		else
-			return (AnyType) x.getElement();
+			return ((Comparable)lhs).compareTo(rhs);
 	}
 
-	public AnyType findMax(BinaryNode x){
-		if(x.getRight() != null)
-			return findMax(x.getRight());
-
-		else
-			return (AnyType) x.getElement();
-	}
-
-	public boolean contains(AnyType key, BinaryNode t){
+	private boolean contains(AnyType x, BinaryNode<AnyType> t){
 		if(t == null)
 			return false;
 
-		int num = key.compareTo((AnyType) t.getElement());
-		if(num < 0)
-			return contains(key, t.getLeft());
-		else
-			return contains(key, t.getRight());
+		int compareResult = myCompare( x, t.element );
+
+		 if( compareResult < 0 )
+			 return contains( x, t.left );
+		 else if( compareResult > 0 )
+		 	return contains( x, t.right );
+		 else
+		 	return true; // Match
+	}
+
+	private BinaryNode<AnyType> findMin(BinaryNode<AnyType> t){
+		if(t == null)
+			return null;
+		else if (t.left == null)
+			return t;
+		return findMin(t.left);
+	}
+
+	private BinaryNode<AnyType> findMax(BinaryNode<AnyType> t){
+		if(t != null)
+			while(t.right != null)
+				t = t.right;
+
+		return t;
 	}
 
 	private BinaryNode<AnyType> insert(AnyType x, BinaryNode<AnyType> t){
-
 		if(t == null)
-			return new BinaryNode<>(x, null, null);
+			return new BinaryNode<>(x, null,null);
+		int compareResult = x.compareTo( t.element );
 
-		int compareResult = x.compareTo(t.getElement());
-
-		if(compareResult < 0)
-			t.left = insert(x, t.left);
-		else if(compareResult > 0)
-			t.right = insert(x, t.right);
-		else
-			;
-
-		return t;
+		 if( compareResult < 0 )
+			 t.left = insert( x, t.left );
+		 else if( compareResult > 0 )
+		 	t.right = insert( x, t.right );
+		 else
+		 	; // Duplicate; do nothing
+		 return t;
 	}
 
-	private BinaryNode<AnyType> remove(AnyType x, BinaryNode<AnyType> t) {
+	private BinaryNode<AnyType> remove( AnyType x, BinaryNode<AnyType> t ) {
+	 if( t == null )
+		 return t; // Item not found; do nothing
+
+		 int compareResult = x.compareTo( t.element );
+
+		 if( compareResult < 0 )
+		 	t.left = remove( x, t.left );
+		 else if( compareResult > 0 )
+		 	t.right = remove( x, t.right );
+		 else if( t.left != null && t.right != null ){ // Two children
+			t.element = findMin( t.right ).element;
+			t.right = remove( t.element, t.right );
+		 }
+		 else
+			 t = ( t.left != null ) ? t.left : t.right;
+		 return t;
+	}
+
+	public void printRange(AnyType k1, AnyType k2, BinaryNode<AnyType> t){
 
 		if(t == null)
-			return t;
+			return ;
 
-		int compareResult = x.compareTo(t.getElement());
-
-		if(compareResult < 0)
-			t.left = remove(x, t.left);
-		else if(compareResult > 0)
-			t.right = remove(x, t.right);
-		else if(t.left != null && t.right != null) {
-			t.element = findMin(t.right).element;
-			t.right = remove(t.element, t.right);
+		if (t.getElement().compareTo(k1) > 0 && t.getElement().compareTo(k2) < 0) {
+			System.out.println(t.getElement());
+			printRange(k1,k2,t.getRight());
+			printRange(k1,k2,t.getLeft());
 		}
+		if (t.getElement().compareTo(k1) < 0)
+			printRange(k1,k2,t.getRight());
 		else
-			t = (t.left != null) ? t.left : t.right;
-
-		return t;
+			printRange(k1,k2,t.getLeft());
 
 	}
 
+	public static void main(String[] args){
+		BinarySearchTree tree = new BinarySearchTree();
+
 
 	}
+}

@@ -128,9 +128,7 @@ public class BinaryNode<AnyType> {
 			right.printPostOrder();
 
 		System.out.println(element);
-	}
-
-	// online resource
+	}// online resource
 	public StringBuilder toString(StringBuilder prefix, boolean isTail, StringBuilder sb) {
 
 		if(right != null)
@@ -151,13 +149,6 @@ public class BinaryNode<AnyType> {
 		return this.toString(new StringBuilder(), true, new StringBuilder()).toString();
 	}
 
-	public static void main(String[] args){
 
-		BinaryNode<Character> b = new BinaryNode<>('b');
-		BinaryNode<Character> c = new BinaryNode<>('c');
-		BinaryNode<Character> a = new BinaryNode<>('a',b,c);
-
-		a.printPreOrder();
-	}
 
 }
