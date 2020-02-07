@@ -6,7 +6,6 @@ Contains, Delete, FindMin, Find Max, insert
 
 package Classwork;
 
-import javax.swing.*;
 import java.util.Comparator;
 
 public class BinarySearchTree<AnyType extends Comparable<AnyType>> {
